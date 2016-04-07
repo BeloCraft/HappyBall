@@ -61,8 +61,7 @@ public class ObjectToRender {
 
     public ObjectToRender(float x, float y, BitmapFont font, String text) {
         this.x = x;
-        this.y = y;
-        this.texture = texture;
+        this.y = y;        
         this.font = font;
         this.text = text;
     }
@@ -83,8 +82,13 @@ public class ObjectToRender {
         this.y = y;
     }
     
-    public void Update(float delta)
+    public void update(float delta)
     {
-        throw new UnsupportedOperationException("It is need override");
+        throw new UnsupportedOperationException("It is need override");        
+    }
+         
+    public void physics()
+    {
+        
     }
 }

@@ -48,7 +48,7 @@ public class RenderScreen implements Screen {
     public void render(float delta) {
 
         if (!stopGame) {
-            gameplay.Update(delta);
+            gameplay.update(delta);
         }
 
         Gdx.gl20.glClearColor(1, 1, 1, 1);

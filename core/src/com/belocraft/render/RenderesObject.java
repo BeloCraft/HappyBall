@@ -34,4 +34,30 @@ public class RenderesObject {
     {
         return this.listObjRender;
     }
+    
+    public<Type> Type findGenericObjectByName(String name)
+    {                
+        for (ObjectToRender obj : listObjRender)
+        {
+            if (obj.getNameObject().equals(name))
+            {
+                return (Type)obj;
+            }
+        }
+        
+        return null;
+    }
+    
+    public ObjectToRender findObjectByName(String name)
+    {
+        for (ObjectToRender obj : listObjRender)
+        {
+            if (obj.getNameObject().equals(name))
+            {
+                return obj;
+            }
+        }
+        
+        return null;
+    }
 }

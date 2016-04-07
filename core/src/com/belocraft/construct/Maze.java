@@ -5,31 +5,28 @@
  */
 package com.belocraft.construct;
 
-import com.belocraft.mymath.Tuple;
-import com.badlogic.gdx.Gdx;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import com.belocraft.singletones.GameConstants;
 
 /**
  *
  * @author Eugene
  */
 public class Maze {
-
-    private int wWall;
-    private int hWall;
-    private int wScreen;
-    private int hScreen;
-    private int wCount;
-    private int hCount;   
     
-    private GeneratorMaze generator;
+    private final int wCount;
+    private final int hCount;   
+    private int[][] map;
+    private final GeneratorMaze generator;
 
-    public Maze(int wWall, int hWall, int wScreen, int hScreen) {
-        this.wCount = wScreen / wWall;
-        this.hCount = hScreen / hWall;        
+    public int[][] getMap() {
+        return map;
+    }
+        
+
+    public Maze() {
         this.generator = new GeneratorMaze();
+        this.wCount = GameConstants.SCREEN_WIDTH / GameConstants.WALL_WIDTH;
+        this.hCount = GameConstants.SCREEN_HEIGHT / GameConstants.WALL_HEIGHT;                
     }
 
     public int getwCount() {
@@ -41,49 +38,7 @@ public class Maze {
     }
 
     public int[][] generate(int countDestroy) {
-        return this.generator.generate(wCount, hCount, countDestroy);
-    }
-    
-    
-    /*public Tuple<Integer,Integer> completedMaze(int[][] map)
-    {
-        Stack<Tuple<Integer,Integer>> stack = new Stack<Tuple<Integer, Integer>>();
-        int[][] mapF = new int[wCount][hCount];        
-        Tuple<Integer,Integer> current = new Tuple<Integer, Integer>(1, 1);
-        Random rnd = new Random();
-        
-        while(allIn(mapF))
-        {
-            ArrayList<Tuple<Integer, Integer>> n = inNeing(mapF, current.x, current.y);
-            if (!n.isEmpty())
-            {
-                stack.push(new Tuple<Integer,Integer>(current.x,current.y));
-                int nr = rnd.nextInt(n.size());
-                current = n.get(nr);
-                mapF[n.get(nr).x][n.get(nr).y] = -1;
-            }else
-            {
-                if (stack.isEmpty())
-                    return current;
-                else
-                current = stack.pop();
-            }
-        }
-        return current;
-    }*/
-
-    void debug(int[][] map)
-    {
-        int free = 0;
-         for (int y = 0; y < hCount; y++) {
-            for (int x = 0; x < wCount; x++) {
-                if (map[x][y] == 0) {
-                    free++;
-                }
-            }
-        }
-        Gdx.app.log("MAZE", String.valueOf(free));
-    }
-
-
+        this.map = this.generator.generate(wCount, hCount, countDestroy);
+        return this.map;
+    }          
 }

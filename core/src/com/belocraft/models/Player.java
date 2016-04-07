@@ -9,6 +9,7 @@ import com.belocraft.inputs.KeyboardInputProcessor;
 import com.belocraft.models.Direction;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.belocraft.construct.Maze;
 import com.belocraft.render.ObjectToRender;
 
 /**
@@ -17,13 +18,13 @@ import com.belocraft.render.ObjectToRender;
  */
 public class Player extends ObjectToRender {
 
-    private int[][] maze;
+    private Maze maze;
     
     public Player(float x, float y, Texture texture) {
         super(x, y, texture);
     }
     
-    public Player(float x, float y, Texture texture, int[][] maze) {
+    public Player(float x, float y, Texture texture, Maze maze) {
         super(x, y, texture);
         this.maze = maze;
     }
@@ -31,9 +32,9 @@ public class Player extends ObjectToRender {
     public Player(float x, float y, Texture texture, BitmapFont font, String text) {
         super(x, y, font, text);
     }
-
-    @Override    
-    public void Update(float delta) {
+    
+    @Override
+    public void update(float delta) {
         for (int str : KeyboardInputProcessor.keyPressedIsNow)
         {
             switch (str) {
@@ -63,21 +64,27 @@ public class Player extends ObjectToRender {
     void move(Direction direction, float delta) {
         switch (direction) {
             case down:                
-                if (maze[Math.round(super.getX()/25)][Math.round((super.getY()-25/2 - 100*delta)/25)] != 0)
+                if (maze.getMap()[Math.round(super.getX()/25)][Math.round((super.getY()-25/2 - 100*delta)/25)] != 0)
                 super.setY(super.getY() - 200*delta);
                 break;
             case up:
-                if (maze[Math.round(super.getX()/25)][Math.round((super.getY()+25/2 + 100*delta)/25)] != 0)
+                if (maze.getMap()[Math.round(super.getX()/25)][Math.round((super.getY()+25/2 + 100*delta)/25)] != 0)
                 super.setY(super.getY() + 200*delta);
                 break;
             case left:
-                if (maze[Math.round((super.getX()-25/2 - 100*delta)/25)][Math.round(super.getY()/25)] != 0)
+                if (maze.getMap()[Math.round((super.getX()-25/2 - 100*delta)/25)][Math.round(super.getY()/25)] != 0)
                 super.setX(super.getX() - 200*delta);
                 break;
             case right:
-                if (maze[Math.round((super.getX()+25/2 + 100*delta)/25)][Math.round(super.getY()/25)] != 0)
+                if (maze.getMap()[Math.round((super.getX()+25/2 + 100*delta)/25)][Math.round(super.getY()/25)] != 0)
                 super.setX(super.getX() + 200*delta);
                 break;
         }
-    }        
+    }   
+    
+     @Override
+    public void physics()
+    {
+        
+    }
 }

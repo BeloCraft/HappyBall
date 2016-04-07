@@ -6,17 +6,14 @@
 package com.belocraft.gameplay;
 
 import com.belocraft.render.ObjectToRender;
-import com.belocraft.render.RenderesObject;
 import com.belocraft.models.Player;
 import com.belocraft.inputs.KeyboardInputProcessor;
-import com.belocraft.mymath.Tuple;
 import com.belocraft.models.Enemy;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.belocraft.construct.MainBuildLevel;
 import com.belocraft.construct.Maze;
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,10 +24,10 @@ import java.util.Random;
  */
 public class Gameplay {
 
-    private RenderesObject managerRender;
-    private ArrayList<ObjectToRender> updateObj;
-    private int wScreen;
-    private int hScreen;
+    
+    private final ArrayList<ObjectToRender> updateObj;
+    private final int wScreen;
+    private final int hScreen;
 
     private int[][] map;
     private Boolean gameOver = false;
@@ -48,84 +45,37 @@ public class Gameplay {
     }
     private Player player;
     private ArrayList<Enemy> enemys;
-    private Maze maze;
-    private int enemy;
+    private Maze maze;    
     private ObjectToRender lose;
+    private final int enemy;
+    private final MainBuildLevel builderLevel;
 
-    public Gameplay(RenderesObject managerRender, int wScreen, int hScreen, int enemy) {
-        this.managerRender = managerRender;
+    public Gameplay(int wScreen, int hScreen, int enemy, MainBuildLevel builderLevel) { 
         this.updateObj = new ArrayList<ObjectToRender>();
         this.wScreen = wScreen;
         this.hScreen = hScreen;
         this.enemy = enemy;
-        constructObj();
+        this.builderLevel = builderLevel;        
+        
+        this.builderLevel.executeConstruct(enemy);
     }
 
-    public void Update(float delta) {
+    public void update(float delta) {
         if (!this.gameOver) {
             for (ObjectToRender obj : updateObj) {
-                obj.Update(delta);
+                obj.update(delta);
             }
         }
-        checkCollision();
-        checkReset();        
-    }
-    int l = 0;
+        checkCollision();        
+    }    
 
-    void checkReset(){
-        for (int str : KeyboardInputProcessor.keyPressedIsNow)
-        {
-            if (str == 46 && this.gameOver && lose != null)
-            {
-                player.setX(25);
-                player.setY(25);
-                this.gameOver = false;
-                managerRender.removeObject(lose);
-            }
-            
-            if (str == 46 && !this.gameOver)
-            {
-                this.canReolad = true;
-            }
-        }
+    public void addObjectForUpdate(ObjectToRender obj)
+    {        
+        this.updateObj.add(obj);
     }
     
     void checkCollision() {
-        float xPlayer = player.getX();
-        float yPlayer = player.getY();
-
-        for (Enemy enemy : enemys) {
-            if (Math.abs(enemy.getX() - xPlayer) < 25 / 2
-                    && Math.abs(enemy.getY() - yPlayer) < 25 / 2) {
-                if (!this.gameOver){
-                BitmapFont font = new BitmapFont();
-                font.setColor(Color.RED);                  
-                font.getData().setScale(5);
-                lose = 
-                        new ObjectToRender(maze.gethCount()*25/2, maze.getwCount()*25/2, font, "You lose");
-                managerRender.addObject(lose);
-                this.canReolad = false;
-                }
-                this.gameOver = true;                
-            }
-        }
-
-        if (Math.abs(xPlayer - (maze.getwCount() - 2) * 25) < 10
-                && Math.abs(yPlayer - (maze.gethCount() - 2) * 25) < 10) {
-            
-            if (!this.gameOver) {
-                lose = null;
-                BitmapFont font = new BitmapFont();
-                font.setColor(Color.GREEN);
-                font.getData().setScale(5);
-                ObjectToRender win
-                        = new ObjectToRender(maze.gethCount() * 25 / 2,
-                                maze.getwCount() * 25 / 2, font, "You win");
-                managerRender.addObject(win);
-            }
-            this.gameOver = true;
-            this.canReolad = true;
-        }
+       
     }
 
     void constructObj() {

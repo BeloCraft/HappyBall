@@ -38,7 +38,7 @@ public class Enemy extends ObjectToRender
     }       
     
     @Override
-    public void Update(float delta)
+    public void update(float delta)
     {
         //int lx = Math.round(super.getX()/25);
         //int ly = Math.round(super.getY()/25);
@@ -95,5 +95,11 @@ try{
                 break;
         }
 
+    }
+    
+    @Override
+    public void physics()
+    {
+        
     }
 }
