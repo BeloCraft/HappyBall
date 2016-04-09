@@ -33,16 +33,6 @@ public class Gameplay {
     private Boolean gameOver = false;
     private Boolean canReolad = false;
 
-    public Boolean getCanReolad() {
-        return canReolad;
-    }
-
-     public void setCanReolad(Boolean t) {
-        this.canReolad = t;
-    }
-    public Boolean getGameOver() {
-        return gameOver;
-    }
     private Player player;
     private ArrayList<Enemy> enemys;
     private Maze maze;    
@@ -55,8 +45,23 @@ public class Gameplay {
         this.wScreen = wScreen;
         this.hScreen = hScreen;
         this.enemy = enemy;
-        this.builderLevel = builderLevel;        
-        
+        this.builderLevel = builderLevel;               
+    }
+    
+    
+    public Boolean getCanReolad() {
+        return canReolad;
+    }
+
+     public void setCanReolad(Boolean t) {
+        this.canReolad = t;
+    }
+    public Boolean getGameOver() {
+        return gameOver;
+    }
+    
+    public void executeConstructLevel()
+    {
         this.builderLevel.executeConstruct(enemy);
     }
 
@@ -66,7 +71,7 @@ public class Gameplay {
                 obj.update(delta);
             }
         }
-        checkCollision();        
+  //      checkCollision();        
     }    
 
     public void addObjectForUpdate(ObjectToRender obj)
@@ -74,7 +79,7 @@ public class Gameplay {
         this.updateObj.add(obj);
     }
     
-    void checkCollision() {
+  /*  void checkCollision() {
        
     }
 
@@ -146,5 +151,5 @@ public class Gameplay {
                 }
             }
         }
-    }
+    }*/
 }

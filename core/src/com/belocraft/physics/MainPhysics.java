@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MainPhysics {
     
-    ArrayList<ObjectToRender> obj;
+  /*  ArrayList<ObjectToRender> obj;
     
     public void addObjectToUpdater(ObjectToRender obj)
     {
@@ -61,5 +61,5 @@ public class MainPhysics {
             this.gameOver = true;
             this.canReolad = true;
         }
-    }
+    }*/
 }
