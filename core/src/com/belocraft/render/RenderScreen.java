@@ -7,12 +7,11 @@ package com.belocraft.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.belocraft.gameplay.Gameplay;
-import java.util.ArrayList;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.belocraft.construct.MainGeneratorStage;
+
 
 /**
  *
@@ -20,69 +19,33 @@ import java.util.ArrayList;
  */
 public class RenderScreen implements Screen {
 
-    private RenderesObject renderObjects;
-    private Gameplay gameplay;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private int lastQuentityFrame;
-    private int tempQuentityFrame;
-    private float tempDeltaFrame;
-    private Boolean stopGame = false;
+    private Stage stage;
 
-    public RenderScreen(RenderesObject renderObjects, Gameplay gameplay) {
-        this.renderObjects = renderObjects;
-        this.gameplay = gameplay;
-        this.batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.BLUE);
-        this.lastQuentityFrame = 0;
-        this.tempDeltaFrame = 0;
-        this.tempQuentityFrame = 0;
+    public RenderScreen (Stage stage)
+    {
+        this.stage = stage;
     }
+
 
     @Override
     public void show() {
+        this.stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+        MainGeneratorStage stageGenerator = new MainGeneratorStage(stage);
+        stageGenerator.generate();
     }
 
     @Override
     public void render(float delta) {
-
-        if (!stopGame) {
-            gameplay.update(delta);
-        }
-
-        Gdx.gl20.glClearColor(1, 1, 1, 1);
-        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-
-        ArrayList<ObjectToRender> objRender = renderObjects.getCollection();
-        for (ObjectToRender obj : objRender) {
-            if (obj.getBitmapFont() != null) {
-               obj.getBitmapFont()
-                            .draw(batch, obj.getText(), obj.getX(), obj.getY());
-
-            } else {
-                batch.draw(obj.getTexture(), obj.getX(), obj.getY());
-            }
-        }
-
-        font.draw(batch, String.valueOf(lastQuentityFrame), 0, 675);
-
-        batch.end();
-
-        if (tempDeltaFrame >= 1) {
-            lastQuentityFrame = tempQuentityFrame;
-            tempDeltaFrame = 0;
-            tempQuentityFrame = 0;
-        }
-
-        tempQuentityFrame++;
-        tempDeltaFrame += delta;
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height)
+    {
+        stage.getViewport().update(width,height,true);
     }
 
     @Override
@@ -99,7 +62,6 @@ public class RenderScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
-
 }

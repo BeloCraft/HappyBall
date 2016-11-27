@@ -16,7 +16,7 @@ import java.util.Stack;
  */
 public class GeneratorMaze {
 
-    int[][] initMap(int[][] map, int wCount, int hCount) {
+    private int[][] initMap(int[][] map, int wCount, int hCount) {
         for (int j = 1; j <= hCount; j++) {
             for (int i = 1; i <= wCount; i++) {
                 if (j % 2 == 0) {
@@ -82,7 +82,7 @@ public class GeneratorMaze {
         return complicate(map, countDestroy, wCount, hCount);
     }
     
-    Tuple<Integer, Integer> returnRndCell(int[][] map, Random rnd, int wCount, int hCount) {
+    private Tuple<Integer, Integer> returnRndCell(int[][] map, Random rnd, int wCount, int hCount) {
         ArrayList<Tuple<Integer, Integer>> free = new ArrayList<Tuple<Integer, Integer>>();
         for (int y = 0; y < hCount; y++) {
             for (int x = 0; x < wCount; x++) {
@@ -98,7 +98,7 @@ public class GeneratorMaze {
         return free.get(n);
     }
 
-    Boolean getCellEnded(int[][] map, int wCount, int hCount) {
+    private Boolean getCellEnded(int[][] map, int wCount, int hCount) {
         for (int y = 1; y < hCount - 1; y += 2) {
             for (int x = 1; x < wCount - 1; x += 2) {
                 if (map[x][y] == 0) {
@@ -109,7 +109,7 @@ public class GeneratorMaze {
         return false;
     }
 
-    ArrayList<Tuple<Integer, Integer>> getNeighbors(int[][] map,
+    private ArrayList<Tuple<Integer, Integer>> getNeighbors(int[][] map,
             int x, int y, int wCount, int hCount) {
         ArrayList<Tuple<Integer, Integer>> result
                 = new ArrayList<Tuple<Integer, Integer>>();      
@@ -141,7 +141,7 @@ public class GeneratorMaze {
         return result;
     }
 
-    int[][] complicate(int[][] map, int countDestroy, int wCount, int hCount) {
+    private int[][] complicate(int[][] map, int countDestroy, int wCount, int hCount) {
         ArrayList<Tuple<Integer, Integer>> mapWall
                 = new ArrayList<Tuple<Integer, Integer>>();
 

@@ -5,86 +5,25 @@
  */
 package com.belocraft.models;
 
-import com.belocraft.inputs.KeyboardInputProcessor;
-import com.belocraft.models.Direction;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.belocraft.construct.Maze;
-import com.belocraft.render.ObjectToRender;
 
 /**
  *
  * @author Eugene
  */
-public class Player extends ObjectToRender {
+public class Player extends Actor {
 
-    private Maze maze;
-    
-    public Player(float x, float y, Texture texture) {
-        super(x, y, texture);
-    }
-    
-    public Player(float x, float y, Texture texture, Maze maze) {
-        super(x, y, texture);
-        this.maze = maze;
-    }
+    public void draw (Batch batch, float parentAlpha) {
+        batch.setColor(1, 1, 1, parentAlpha);
 
-    public Player(float x, float y, Texture texture, BitmapFont font, String text) {
-        super(x, y, font, text);
-    }
-    
-    @Override
-    public void update(float delta) {
-        for (int str : KeyboardInputProcessor.keyPressedIsNow)
-        {
-            switch (str) {
-                /*        
-        KEY: 29 - a
-        KEY: 51 - w
-        KEY: 47 - s
-        KEY: 32 - d
-                 */
-
-                case 29:
-                    move(Direction.left,delta);
-                    break;
-                case 51:
-                    move(Direction.up,delta);
-                    break;
-                case 47:
-                    move(Direction.down,delta);
-                    break;
-                case 32:
-                    move(Direction.right,delta);
-                    break;
-            }
-        }
-    }
-
-    void move(Direction direction, float delta) {
-        switch (direction) {
-            case down:                
-                if (maze.getMap()[Math.round(super.getX()/25)][Math.round((super.getY()-25/2 - 100*delta)/25)] != 0)
-                super.setY(super.getY() - 200*delta);
-                break;
-            case up:
-                if (maze.getMap()[Math.round(super.getX()/25)][Math.round((super.getY()+25/2 + 100*delta)/25)] != 0)
-                super.setY(super.getY() + 200*delta);
-                break;
-            case left:
-                if (maze.getMap()[Math.round((super.getX()-25/2 - 100*delta)/25)][Math.round(super.getY()/25)] != 0)
-                super.setX(super.getX() - 200*delta);
-                break;
-            case right:
-                if (maze.getMap()[Math.round((super.getX()+25/2 + 100*delta)/25)][Math.round(super.getY()/25)] != 0)
-                super.setX(super.getX() + 200*delta);
-                break;
-        }
-    }   
-    
-     @Override
-    public void physics()
-    {
-        
+        Pixmap pixRect = new Pixmap(5, 5, Pixmap.Format.RGBA8888);
+        pixRect.setColor(Color.BLUE);
+        pixRect.fillRectangle(0, 0, 5, 5);
+        Texture t = new Texture(pixRect);
+        batch.draw(t, super.getX(), super.getY(), 50, 50);
     }
 }
