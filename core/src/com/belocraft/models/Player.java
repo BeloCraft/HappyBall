@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Texture;
+import com.belocraft.singletones.GameConstants;
 
 /**
  *
@@ -17,13 +18,18 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class Player extends Actor {
 
+    public Player(float x, float y){
+        super.setX(x);
+        super.setY(y);
+    }
+
     public void draw (Batch batch, float parentAlpha) {
         batch.setColor(1, 1, 1, parentAlpha);
-
-        Pixmap pixRect = new Pixmap(5, 5, Pixmap.Format.RGBA8888);
+        Pixmap pixRect = new Pixmap(25, 25, Pixmap.Format.RGBA8888);
         pixRect.setColor(Color.BLUE);
-        pixRect.fillRectangle(0, 0, 5, 5);
+        pixRect.fillCircle(Math.round(GameConstants.WALL_WIDTH/2F)-1,Math.round(GameConstants.WALL_HEIGHT/2F)-1,
+                Math.round(GameConstants.WALL_WIDTH/2F));
         Texture t = new Texture(pixRect);
-        batch.draw(t, super.getX(), super.getY(), 50, 50);
+        batch.draw(t, super.getX(), super.getY(),GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
     }
 }
