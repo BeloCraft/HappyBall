@@ -1,16 +1,12 @@
 package com.belocraft.construct;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.belocraft.models.Enemy;
 import com.belocraft.models.Finish;
 import com.belocraft.models.Player;
 import com.belocraft.models.Wall;
+import com.belocraft.physics.CollisionsListener;
 import com.belocraft.render.Level;
 import com.belocraft.singletones.GameConstants;
 
@@ -28,7 +24,7 @@ public class MainGeneratorStage {
         this.stage = stage;
     }
 
-    public void generate(int enemyCount, World world)
+    public void generate(int enemyCount, World world, CollisionsListener collisionsListener)
     {
         GeneratorMaze maze = new GeneratorMaze();
         int width = GameConstants.SCREEN_WIDTH/GameConstants.WALL_WIDTH;
@@ -46,7 +42,7 @@ public class MainGeneratorStage {
             for (int j = 0; j < height; j++){
                 if (map[i][j] == 0)
                 {
-                    walls.addActor(new Wall(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT));
+                    walls.addActor(new Wall(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT,world));
                 }else
                 {
                     if (i > 5 && j > 5 && enemyCount > 0)
@@ -57,7 +53,7 @@ public class MainGeneratorStage {
                             l = Math.round(((i+j)/(width+height+0.0F))*100);
                         if (rnd.nextInt(100) <= l)
                         {
-                            Enemy newEnemy = new Enemy(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT);
+                            Enemy newEnemy = new Enemy(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT,world);
                             enemys.addActor(newEnemy);
                             enemyCount -= 1;
                         }
@@ -73,6 +69,7 @@ public class MainGeneratorStage {
         stage.addActor(player);
         player.initCollider(world);
         stage.setPlayer(player);
+        collisionsListener.addObject(player);
 
         Finish finish = new Finish(GameConstants.SCREEN_WIDTH-GameConstants.WALL_WIDTH*2,
                 GameConstants.SCREEN_HEIGHT-GameConstants.WALL_HEIGHT*2);

@@ -7,46 +7,49 @@ package com.belocraft.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.graphics.Texture;
 import com.belocraft.singletones.GameConstants;
 
 /**
  *
  * @author Eugene
  */
-public class Player extends Actor {
+public class Player extends Actor implements IObject {
 
     private Fixture collider;
     private Body body;
 
-    boolean isKeyDown_A;
-    boolean isKeyDown_D;
-    boolean isKeyDown_W;
-    boolean isKeyDown_S;
+    private boolean isKeyDown_A;
+    private boolean isKeyDown_D;
+    private boolean isKeyDown_W;
+    private boolean isKeyDown_S;
+    private Texture t;
 
     public Player(float x, float y){
-        super.setX(x);
-        super.setY(y);
+        super.setX(x / GameConstants.WORLD_SCALE);
+        super.setY(y / GameConstants.WORLD_SCALE);
         super.setName("Player");
+        Pixmap pixRect = new Pixmap(25, 25, Pixmap.Format.RGBA8888);
+        pixRect.setColor(Color.BLUE);
+        pixRect.fillCircle(Math.round(GameConstants.WALL_WIDTH/2F)-1,Math.round(GameConstants.WALL_HEIGHT/2F)-1,
+                Math.round(GameConstants.WALL_WIDTH/2F));
+        t = new Texture(pixRect);
+        pixRect.dispose();
     }
 
     public void draw (Batch batch, float parentAlpha) {
 
-        super.setX(body.getPosition().x*GameConstants.WORLD_SCALE);
-        super.setY(body.getPosition().y*GameConstants.WORLD_SCALE);
-
-        Gdx.app.log("cord",body.getLinearVelocity().toString());
+        super.setX(body.getPosition().x);
+        super.setY(body.getPosition().y);
 
         if (isKeyDown_W)
         {
             body.setLinearVelocity(new Vector2(body.getLinearVelocity().x,GameConstants.PLAYER_SPEED));
-            Gdx.app.log("cord",GameConstants.PLAYER_SPEED + "");
         }
 
         if (isKeyDown_A)
@@ -73,15 +76,7 @@ public class Player extends Actor {
         {
             body.setLinearVelocity(new Vector2(0,body.getLinearVelocity().y));
         }
-
-        batch.setColor(1, 1, 1, parentAlpha);
-        Pixmap pixRect = new Pixmap(25, 25, Pixmap.Format.RGBA8888);
-        pixRect.setColor(Color.BLUE);
-        pixRect.fillCircle(Math.round(GameConstants.WALL_WIDTH/2F)-1,Math.round(GameConstants.WALL_HEIGHT/2F)-1,
-                Math.round(GameConstants.WALL_WIDTH/2F));
-        Texture t = new Texture(pixRect);
-        pixRect.dispose();
-        batch.draw(t, super.getX(), super.getY(),GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
+        batch.draw(t, super.getX() * GameConstants.WORLD_SCALE, super.getY() * GameConstants.WORLD_SCALE,GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
     }
 
     public Fixture initCollider(World world)
@@ -90,11 +85,11 @@ public class Player extends Actor {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
-        shape.setPosition(new Vector2(GameConstants.WALL_WIDTH/2,GameConstants.WALL_HEIGHT/2));
-        shape.setRadius(GameConstants.WALL_WIDTH);
+        shape.setPosition(new Vector2(GameConstants.WALL_WIDTH/2F,GameConstants.WALL_HEIGHT/2F));
+        shape.setRadius((GameConstants.WALL_WIDTH/2)/GameConstants.WORLD_SCALE);
         collider = body.createFixture(shape,0);
         shape.dispose();
-        body.setTransform(new Vector2(super.getX()/GameConstants.WORLD_SCALE,super.getY()/GameConstants.WORLD_SCALE),0);
+        body.setTransform(new Vector2(super.getX(),super.getY()),0);
         body.setUserData(super.getName());
         return collider;
     }
@@ -144,5 +139,32 @@ public class Player extends Actor {
             isKeyDown_S = false;
         }
         return false;
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        if (contact.getFixtureA().getBody().getUserData().toString().equals("Enemy"))
+        {
+            body.getTransform().setPosition(new Vector2(GameConstants.WALL_WIDTH/GameConstants.WORLD_SCALE,
+                    GameConstants.WALL_HEIGHT/GameConstants.WORLD_SCALE));
+            super.setX(GameConstants.WALL_WIDTH/GameConstants.WORLD_SCALE);
+            super.setY(GameConstants.WALL_HEIGHT/GameConstants.WORLD_SCALE);
+            body.setTransform(25,25,0);
+        }
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
     }
 }
