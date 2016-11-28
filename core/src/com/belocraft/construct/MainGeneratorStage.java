@@ -2,12 +2,16 @@ package com.belocraft.construct;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.belocraft.models.Enemy;
 import com.belocraft.models.Finish;
 import com.belocraft.models.Player;
 import com.belocraft.models.Wall;
+import com.belocraft.render.Level;
 import com.belocraft.singletones.GameConstants;
 
 import java.util.Random;
@@ -17,14 +21,14 @@ import java.util.Random;
  */
 public class MainGeneratorStage {
 
-    private Stage stage;
+    private Level stage;
 
-    public MainGeneratorStage(Stage stage)
+    public MainGeneratorStage(Level stage)
     {
         this.stage = stage;
     }
 
-    public void generate(int enemyCount)
+    public void generate(int enemyCount, World world)
     {
         GeneratorMaze maze = new GeneratorMaze();
         int width = GameConstants.SCREEN_WIDTH/GameConstants.WALL_WIDTH;
@@ -37,6 +41,7 @@ public class MainGeneratorStage {
         walls.setX(0);
         walls.setY(0);
         Random rnd = new Random();
+        int w = 0;
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
                 if (map[i][j] == 0)
@@ -61,12 +66,14 @@ public class MainGeneratorStage {
             }
         }
 
-
         stage.addActor(walls);
         stage.addActor(enemys);
 
         Player player = new Player(GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
         stage.addActor(player);
+        player.initCollider(world);
+        stage.setPlayer(player);
+
         Finish finish = new Finish(GameConstants.SCREEN_WIDTH-GameConstants.WALL_WIDTH*2,
                 GameConstants.SCREEN_HEIGHT-GameConstants.WALL_HEIGHT*2);
         stage.addActor(finish);

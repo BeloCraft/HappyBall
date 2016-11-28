@@ -55,6 +55,7 @@ public class Finish extends Actor{
         pixRect.setColor(color);
         pixRect.fillRectangle(0, 0, GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
         Texture t = new Texture(pixRect);
+        pixRect.dispose();
         batch.draw(t, super.getX(), super.getY(), GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
     }
 }

@@ -18,19 +18,20 @@ import com.belocraft.singletones.GameConstants;
  */
 public class Enemy extends Actor
 {
+    Texture t;
     public Enemy(float x, float y)
     {
         super.setX(x);
         super.setY(y);
-    }
-
-    public void draw (Batch batch, float parentAlpha) {
-        batch.setColor(1, 1, 1, parentAlpha);
         Pixmap pixRect = new Pixmap(25, 25, Pixmap.Format.RGBA8888);
         pixRect.setColor(Color.MAGENTA);
         pixRect.fillCircle(Math.round(GameConstants.WALL_WIDTH/2F)-1,Math.round(GameConstants.WALL_HEIGHT/2F)-1,
                 Math.round(GameConstants.WALL_WIDTH/2F));
-        Texture t = new Texture(pixRect);
+        t = new Texture(pixRect);
+    }
+
+    public void draw (Batch batch, float parentAlpha) {
+
         batch.draw(t, super.getX(), super.getY(),GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
     }
 }

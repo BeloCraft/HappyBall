@@ -12,17 +12,18 @@ import com.belocraft.singletones.GameConstants;
  */
 public class Wall extends Actor {
 
+    Texture t;
     public Wall (float x, float y){
         super.setX(x);
         super.setY(y);
-    }
-
-    public void draw (Batch batch, float parentAlpha) {
-        batch.setColor(1, 1, 1, parentAlpha);
         Pixmap pixRect = new Pixmap(GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT, Pixmap.Format.RGBA8888);
         pixRect.setColor(Color.BLACK);
         pixRect.fillRectangle(0, 0, GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
-        Texture t = new Texture(pixRect);
+        t = new Texture(pixRect);
+        pixRect.dispose();
+    }
+
+    public void draw (Batch batch, float parentAlpha) {
         batch.draw(t, super.getX(), super.getY(), GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
     }
 }
