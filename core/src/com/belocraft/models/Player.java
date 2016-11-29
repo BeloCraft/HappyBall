@@ -9,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -90,7 +89,7 @@ public class Player extends Actor implements IObject {
         collider = body.createFixture(shape,0);
         shape.dispose();
         body.setTransform(new Vector2(super.getX(),super.getY()),0);
-        body.setUserData(super.getName());
+        body.setUserData(this);
         return collider;
     }
 
@@ -101,6 +100,7 @@ public class Player extends Actor implements IObject {
 
     public boolean keyDown(int keycode)
     {
+
         if (keycode == Input.Keys.A)
         {
             isKeyDown_A = true;
@@ -143,19 +143,29 @@ public class Player extends Actor implements IObject {
 
     @Override
     public void beginContact(Contact contact) {
+        IObject objFirst = (IObject)contact.getFixtureA().getBody().getUserData();
+        IObject objSecond = (IObject)contact.getFixtureB().getBody().getUserData();
 
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-        if (contact.getFixtureA().getBody().getUserData().toString().equals("Enemy"))
+        if ((objFirst == this || objSecond == this) &&
+                (objFirst.toString().equals("Enemy") || objSecond.toString().equals("Enemy")))
         {
             body.getTransform().setPosition(new Vector2(GameConstants.WALL_WIDTH/GameConstants.WORLD_SCALE,
                     GameConstants.WALL_HEIGHT/GameConstants.WORLD_SCALE));
             super.setX(GameConstants.WALL_WIDTH/GameConstants.WORLD_SCALE);
             super.setY(GameConstants.WALL_HEIGHT/GameConstants.WORLD_SCALE);
-            body.setTransform(25,25,0);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    body.setTransform(GameConstants.WALL_WIDTH/2F,GameConstants.WALL_HEIGHT/2F,0);
+                }
+            });
+
         }
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
     }
 
     @Override
@@ -166,5 +176,11 @@ public class Player extends Actor implements IObject {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.getName();
     }
 }

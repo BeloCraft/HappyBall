@@ -12,7 +12,7 @@ import com.belocraft.singletones.GameConstants;
 /**
  * Created by Eugene on 27.11.2016.
  */
-public class Wall extends Actor {
+public class Wall extends Actor implements IObject {
 
     private Texture t;
     private Body body;
@@ -37,11 +37,36 @@ public class Wall extends Actor {
         collider = body.createFixture(shape,0);
         shape.dispose();
         body.setTransform(new Vector2(super.getX()+GameConstants.WALL_WIDTH/2F,super.getY()+GameConstants.WALL_HEIGHT/2F),0);
-        body.setUserData(super.getName());
+        body.setUserData(this);
     }
 
     public void draw (Batch batch, float parentAlpha) {
         batch.draw(t, super.getX() * GameConstants.WORLD_SCALE, super.getY() * GameConstants.WORLD_SCALE, GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
     }
 
+    @Override
+    public String toString()
+    {
+        return super.getName();
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
+    }
 }

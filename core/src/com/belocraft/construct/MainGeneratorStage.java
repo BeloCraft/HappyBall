@@ -37,7 +37,6 @@ public class MainGeneratorStage {
         walls.setX(0);
         walls.setY(0);
         Random rnd = new Random();
-        int w = 0;
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
                 if (map[i][j] == 0)
@@ -56,6 +55,7 @@ public class MainGeneratorStage {
                             Enemy newEnemy = new Enemy(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT,world);
                             enemys.addActor(newEnemy);
                             enemyCount -= 1;
+                            collisionsListener.addObject(newEnemy);
                         }
                     }
                 }
