@@ -75,7 +75,8 @@ public class Player extends Actor implements IObject {
         {
             body.setLinearVelocity(new Vector2(0,body.getLinearVelocity().y));
         }
-        batch.draw(t, super.getX() * GameConstants.WORLD_SCALE, super.getY() * GameConstants.WORLD_SCALE,GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
+        batch.draw(t, super.getX() * GameConstants.WORLD_SCALE, super.getY() *
+                GameConstants.WORLD_SCALE,GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
     }
 
     public Fixture initCollider(World world)

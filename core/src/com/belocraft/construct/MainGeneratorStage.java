@@ -52,18 +52,23 @@ public class MainGeneratorStage {
                             l = Math.round(((i+j)/(width+height+0.0F))*100);
                         if (rnd.nextInt(100) <= l)
                         {
-                            Enemy newEnemy = new Enemy(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT,world);
+                           /* Enemy newEnemy = new Enemy(i*GameConstants.WALL_WIDTH,j*GameConstants.WALL_HEIGHT,world);
                             enemys.addActor(newEnemy);
                             enemyCount -= 1;
-                            collisionsListener.addObject(newEnemy);
+                            collisionsListener.addObject(newEnemy);*/
+                           enemyCount = 0;
                         }
                     }
                 }
             }
         }
 
+        Enemy enemy = new Enemy(GameConstants.SCREEN_WIDTH-50,GameConstants.SCREEN_HEIGHT-50,world);
+        collisionsListener.addObject(enemy);
+        stage.addActor(enemy);
+
         stage.addActor(walls);
-        stage.addActor(enemys);
+       // stage.addActor(enemys);
 
         Player player = new Player(GameConstants.WALL_WIDTH,GameConstants.WALL_HEIGHT);
         stage.addActor(player);

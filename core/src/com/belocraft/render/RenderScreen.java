@@ -66,7 +66,6 @@ public class RenderScreen implements Screen {
         stage.draw();
         world.step(delta, 2, 2);
 
-
         //Debug
         b.render(world,cam.combined);
 

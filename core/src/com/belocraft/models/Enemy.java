@@ -9,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -27,6 +26,8 @@ public class Enemy extends Actor implements IObject {
     private Fixture collider;
     private Body body;
     private Direction direction;
+    private EnemyLogic enemyLogic;
+    private World world;
 
     public Enemy(float x, float y, World world)
     {
@@ -51,6 +52,9 @@ public class Enemy extends Actor implements IObject {
         shape.dispose();
         body.setTransform(new Vector2(super.getX(),super.getY()),0);
         body.setUserData(this);
+
+        enemyLogic = new EnemyLogic();
+        this.world = world;
     }
 
     public void draw (Batch batch, float parentAlpha) {
@@ -78,6 +82,15 @@ public class Enemy extends Actor implements IObject {
         {
             body.setLinearVelocity(new Vector2(GameConstants.PLAYER_SPEED,body.getLinearVelocity().x));
         }
+
+        world.rayCast(new RayCastCallback() {
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                Gdx.app.log("CAST",fixture.getBody().getUserData().toString());
+                return 0;
+            }
+        }, new Vector2(this.getX()*GameConstants.WORLD_SCALE,this.getY()*GameConstants.WORLD_SCALE),
+                new Vector2((this.getX()*GameConstants.WORLD_SCALE)-50,this.getY()*GameConstants.WORLD_SCALE));
     }
 
 
@@ -93,7 +106,7 @@ public class Enemy extends Actor implements IObject {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-        IObject objFirst = (IObject)contact.getFixtureA().getBody().getUserData();
+    /*    IObject objFirst = (IObject)contact.getFixtureA().getBody().getUserData();
         IObject objSecond = (IObject)contact.getFixtureB().getBody().getUserData();
 
         if ((objFirst == this || objSecond == this) &&
@@ -117,7 +130,7 @@ public class Enemy extends Actor implements IObject {
                     direction = Direction.right;
                     break;
             }
-        }
+        }*/
     }
 
     @Override
